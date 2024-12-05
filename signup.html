@@ -5,26 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Sign-up</title>
     <link rel="icon" href="./assets/amazon-icon.png">
-    <link rel="stylesheet" href="css/signin.css"> 
+    <link rel="stylesheet" href="css/signin.css">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+            margin-top: 5px;
+        }
+        input.error {
+            border: 1px solid red;
+        }
+    </style>
 </head>
 <body>
-    <a href="./index.html"><img class="logo" src="./assets/amazon_logo_dark.png" alt="" width="100px"></a>
+    <a href="./index.html"><img class="logo" src="./assets/amazon_logo_dark.png" alt="Amazon Logo" width="100px"></a>
     <div class="signin-container">
         <h1 class="signin-title">Create account</h1>
         <h5 class="input-label">Your name</h5>
-        <input type="text" placeholder="First and last name">
+        <input type="text" id="name" placeholder="First and last name">
+        <span id="name-error" class="error-message">Name cannot be empty.</span>
+
         <h5 class="input-label">Mobile number or Email</h5>
-        <input type="text"> 
+        <input type="text" id="emailOrMobile" placeholder="Enter email or mobile number">
+        <span id="email-error" class="error-message">Please enter a valid email or mobile number.</span>
+
         <h5 class="input-label">Password</h5>
-        <input type="password" placeholder="Atleast 6 characters"> 
+        <input type="password" id="password" placeholder="At least 6 characters">
+        <span id="password-error" class="error-message">Password must be at least 6 characters long.</span>
+
         <h5 class="input-label">Re-Enter Password</h5>
-        <input type="password" placeholder="Atleast 6 characters"> 
-        <button>Continue</button>
-        <p class="signin-condition">By creating an account you agree to Amazon's terms and <span>condition of use</span> and <span>privacy notice.</span></p>
+        <input type="password" id="confirmPassword" placeholder="At least 6 characters">
+        <span id="confirm-password-error" class="error-message">Passwords do not match.</span>
+
+        <button id="signUpButton">Continue</button>
+        <p class="signin-condition">By creating an account you agree to Amazon's terms and 
+            <span>condition of use</span> and <span>privacy notice.</span>
+        </p>
         <h4>Buying for work?</h4>
-        <P class="signin-business"><span>Shop on Amazon business</span></P><br>
+        <p class="signin-business"><span>Shop on Amazon business</span></p>
+        <br>
         <hr>
-        <p class="signin-account">Already have an account? <a href="./signin.html"><span>Signin</span></a></p>
+        <p class="signin-account">Already have an account? <a href="./signin.html"><span>Sign in</span></a></p>
     </div>
     <footer>
         <div class="footer-links">
@@ -34,5 +56,71 @@
         </div>
         <p class="copyright-text">&copy; 1996-2024 Amazon.com, Inc. or its affiliates</p>
     </footer>
+    <script>
+        document.getElementById('signUpButton').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Input fields
+            const nameField = document.getElementById('name');
+            const emailField = document.getElementById('emailOrMobile');
+            const passwordField = document.getElementById('password');
+            const confirmPasswordField = document.getElementById('confirmPassword');
+
+            // Error messages
+            const nameError = document.getElementById('name-error');
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            const confirmPasswordError = document.getElementById('confirm-password-error');
+
+            // Validation regex
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            const mobileRegex = /^[0-9]{10}$/;
+
+            // Reset errors
+            let isValid = true;
+            nameError.style.display = 'none';
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            confirmPasswordError.style.display = 'none';
+            nameField.classList.remove('error');
+            emailField.classList.remove('error');
+            passwordField.classList.remove('error');
+            confirmPasswordField.classList.remove('error');
+
+            // Validate name
+            if (!nameField.value.trim()) {
+                nameError.style.display = 'block';
+                nameField.classList.add('error');
+                isValid = false;
+            }
+
+            // Validate email or mobile number
+            if (!emailRegex.test(emailField.value.trim()) && !mobileRegex.test(emailField.value.trim())) {
+                emailError.style.display = 'block';
+                emailField.classList.add('error');
+                isValid = false;
+            }
+
+            // Validate password
+            if (passwordField.value.trim().length < 6) {
+                passwordError.style.display = 'block';
+                passwordField.classList.add('error');
+                isValid = false;
+            }
+
+            // Validate confirm password
+            if (passwordField.value.trim() !== confirmPasswordField.value.trim()) {
+                confirmPasswordError.style.display = 'block';
+                confirmPasswordField.classList.add('error');
+                isValid = false;
+            }
+
+            // If valid, proceed
+            if (isValid) {
+                alert('Sign-up validation passed! Proceeding...');
+                // Add further logic (e.g., form submission or redirect)
+            }
+        });
+    </script>
 </body>
 </html>
